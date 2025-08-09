@@ -1,14 +1,13 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import { Search } from 'lucide-react';
-// import RegisterForm from "../components/RegisterForm";
+import { Search } from "lucide-react";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import SignInForm from "../Login sign-up/SignInForm";
-import RegisterForm from "../Login sign-up/RegisterForm";
 
 const Header = () => {
-  const [showRegister, setShowRegister] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -16,7 +15,10 @@ const Header = () => {
         {/* Left: Logo + Nav */}
         <div className="flex items-center gap-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">N</span>
             </div>
@@ -24,21 +26,38 @@ const Header = () => {
               NextSkill
             </span>
           </div>
-          
+
           {/* Nav Links */}
           <ul className="flex items-center gap-8 text-sm text-gray-700 font-medium">
-            <li className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group">
-              Courses
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
-            </li>
-            <li className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group">
-              Categories
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
-            </li>
-            <li className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group">
-              About
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
-            </li>
+            <NavLink
+              to="/Courses"
+              className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group"
+            >
+              <li>
+                Courses
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
+              </li>
+            </NavLink>
+
+            <NavLink
+              to="/Categories"
+              className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group"
+            >
+              <li>
+                Categories
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
+              </li>
+            </NavLink>
+
+            <NavLink
+              to="/About"
+              className="cursor-pointer hover:text-blue-600 transition-colors duration-200 relative group"
+            >
+              <li>
+                About
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-200 group-hover:w-full"></span>
+              </li>
+            </NavLink>
           </ul>
         </div>
 
@@ -61,15 +80,14 @@ const Header = () => {
             Login
           </button>
           <button
-            onClick={() => setShowRegister(true)}
+            onClick={() => navigate("/register")}
             className="text-sm px-6 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
-           Register
+            Register
           </button>
         </div>
       </nav>
 
-      {showRegister && <RegisterForm onClose={() => setShowRegister(false)} />}
       {showSignIn && <SignInForm onClose={() => setShowSignIn(false)} />}
     </div>
   );
