@@ -1,60 +1,59 @@
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser } from "../API/LoginSignupApi";
 
-interface SignInFormProps {
-  onClose: () => void;
-}
+// ✅ Zod schema
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+type LoginFormData = z.infer<typeof loginSchema>;
 
-const SignInForm: React.FC<SignInFormProps> = ({ onClose }) => {
-  const [isLoading, setIsLoading] = useState(false);
+const SignInForm: React.FC = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    try {
-      const res = await fetch("http://localhost:5000/api/users/loginuser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || "Login failed");
+  const { mutate, isPending } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (result) => {
+      toast.success("Login successful!");
+      localStorage.setItem("token", result.token);
+      
+      if (result.user.role === "instructor") {
+        navigate("/instructor/dashboard");
+      } else if (result.user.role === "student") {
+        navigate("/courses");
       }
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Login failed");
+    },
+  });
 
-      const data = await res.json();
-      console.log("Login successful:", data);
-
-      // Save token to localStorage (or cookies if needed)
-      localStorage.setItem("token", data.token);
-
-      // Close modal after login
-      onClose();
-
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (data: LoginFormData) => {
+    mutate(data);
   };
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
-        
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={() => navigate("/")}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"
         >
           ×
@@ -68,29 +67,30 @@ const SignInForm: React.FC<SignInFormProps> = ({ onClose }) => {
           <p className="text-gray-500 text-sm">Sign in to your account</p>
         </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="mb-4 text-red-500 text-sm text-center">{error}</div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-            required
-          />
+          <div>
+            <input
+              type="email"
+              placeholder="Email Address"
+              {...register("email")}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
 
           {/* Password */}
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              name="password"
               placeholder="Password"
+              {...register("password")}
               className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-              required
             />
             <button
               type="button"
@@ -103,16 +103,28 @@ const SignInForm: React.FC<SignInFormProps> = ({ onClose }) => {
                 <Eye className="h-5 w-5 text-gray-400" />
               )}
             </button>
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
-          {/* Sign In Button */}
+          {/* Submit */}
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isPending}
             className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl"
           >
-            {isLoading ? "Signing in..." : "Sign In"}
+            {isPending ? "Signing in..." : "Sign In"}
           </button>
+
+          <p className="mt-4 text-sm text-gray-600">
+            New to Nextskill?{" "}
+            <Link to="/register" className="text-green-600 hover:underline">
+              Register
+            </Link>
+          </p>
         </form>
       </div>
     </div>

@@ -1,6 +1,7 @@
 // src/pages/RegisterChoice.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { User, GraduationCap } from "lucide-react";
 
 interface RoleCardProps {
@@ -26,7 +27,9 @@ const RoleCard: React.FC<RoleCardProps> = ({
       type="button"
       onClick={() => onSelect(value)}
       className={`flex flex-col items-start p-5 border rounded-lg w-full sm:w-80 text-left transition-all duration-200 
-      ${isSelected ? "border-green-600 bg-green-50" : "border-gray-300 bg-white"} 
+      ${
+        isSelected ? "border-green-600 bg-green-50" : "border-gray-300 bg-white"
+      } 
       hover:border-green-600 hover:bg-green-50`}
     >
       <div className="flex items-center gap-3">
@@ -87,18 +90,24 @@ const RegisterChoice: React.FC = () => {
         onClick={handleContinue}
         disabled={!selectedRole}
         className={`px-6 py-3 rounded-lg text-white font-semibold transition-colors 
-        ${selectedRole ? "bg-green-600 hover:bg-green-700" : "bg-gray-400 cursor-not-allowed"}`}
+        ${
+          selectedRole
+            ? "bg-green-600 hover:bg-green-700"
+            : "bg-gray-400 cursor-not-allowed"
+        }`}
       >
         {selectedRole
-          ? `Join as a ${selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)}`
+          ? `Join as a ${
+              selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)
+            }`
           : "Select a role to continue"}
       </button>
 
       <p className="mt-4 text-sm text-gray-600">
         Already have an account?{" "}
-        <a href="/login" className="text-green-600 hover:underline">
+        <Link to="/login" className="text-green-600 hover:underline">
           Log In
-        </a>
+        </Link>
       </p>
     </main>
   );
