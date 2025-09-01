@@ -6,7 +6,7 @@ const HeroSection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-gradient-to-b from-blue-50 to-green-50 text-center py-20 px-4 min-h-screen mt-12">
+    <section className="bg-gradient-to-b from-blue-50 to-green-50 text-center pt-45 px-7 max-w-full  min-h-screen w-full bg-blue-100 ">
       <div className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1 text-sm text-gray-700 shadow-sm mb-6">
         <span>🚀</span>
         Over 5000 students learning with us
@@ -19,7 +19,7 @@ const HeroSection: React.FC = () => {
         </span>
       </h1>
 
-      <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+      <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-8 ">
         Learn from industry experts and transform your career with our
         comprehensive online courses. Start your learning journey today.
       </p>

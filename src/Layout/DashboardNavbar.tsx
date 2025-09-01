@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Bell,
-  ChartLine,
-  BookText,
-  Plus,
-  Users,
-  DollarSign,
-  Settings,
-} from "lucide-react";
+import {Bell} from "lucide-react";
 import SearchBar from "../components/SearchBar";
 import KamalImg from "../assets/images/kamal.jpg";
 // import KamalImg from "../assets/images/kamal.jpg";

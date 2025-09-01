@@ -1,8 +1,11 @@
 import React from 'react'
+import Header from '../components/Navbar'
 
 const Categories = () => {
   return (
-    <div>Categories</div>
+    <div>
+           <Header/>
+    </div>
   )
 }
 

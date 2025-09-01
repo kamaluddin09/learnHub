@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { createCourse } from "../API/InstructorApi";
 import { Loader2 } from "lucide-react";
+import { toast } from "react-toastify";
 
 // ------------------- Schemas -------------------
 const basicInfoSchema = z.object({
@@ -58,11 +59,12 @@ const CreateCourseWizard: React.FC = () => {
   // Mutation
   const mutation = useMutation({
     mutationFn: createCourse,
+
     onSuccess: () => {
-      alert("✅ Course created successfully!");
+      toast.success("✅ Course created successfully!");
     },
     onError: (error: any) => {
-      alert("❌ Error creating course: " + error.message);
+      toast.error("❌ Error creating course: " + error.message);
     },
   });
 
@@ -171,13 +173,28 @@ const CreateCourseWizard: React.FC = () => {
             {/* Price + Level */}
             <div className="grid grid-cols-2 gap-4 ">
               <div>
-                <label className="block text-sm font-medium">Price</label>
-                <input
-                 {...form.register("basicInfo.price")} 
-                 placeholder="50$"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white"
-                 />
+                <label className="block text-sm font-medium">Price (USD)</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-3 flex items-center text-gray-500">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    min={1}
+                    placeholder="50"
+                    {...form.register("basicInfo.price", {
+                      valueAsNumber: true,
+                    })}
+                    className="w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md bg-white "
+                  />
+                </div>
+                {form.formState.errors.basicInfo?.price && (
+                  <p className="text-red-500 text-sm">
+                    {form.formState.errors.basicInfo.price.message}
+                  </p>
+                )}
               </div>
+
               <div>
                 <label className="block text-sm font-medium">Level</label>
                 <select
@@ -198,12 +215,6 @@ const CreateCourseWizard: React.FC = () => {
             </div>
 
             {/* Price (hidden) */}
-            <input
-              type="number"
-              {...form.register("basicInfo.price", { valueAsNumber: true })}
-              defaultValue={99}
-              className="hidden"
-            />
           </div>
         );
 
@@ -258,6 +269,7 @@ const CreateCourseWizard: React.FC = () => {
               <p>
                 <strong>Title:</strong> {values.basicInfo.title}
               </p>
+
               <p>
                 <strong>Description:</strong> {values.basicInfo.description}
               </p>

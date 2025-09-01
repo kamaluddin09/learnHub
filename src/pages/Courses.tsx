@@ -2,10 +2,12 @@ import React from "react";
 // import CourseCard from "../UI/CourseCard";
 import { Search } from "lucide-react";
 import CourseCardWrapper from "../UI/CoursesCardWrapper";
+import Header from "../components/Navbar";
 
 const Courses = () => {
   return (
     <div className="mt-20 flex flex-col items-center  justify-center">
+      <Header />
       <section className="py-16 bg-[#E8FAF2] w-full ">
         <div className="container mx-auto px-4 flex flex-col items-center justify-center">
           <h1 className="text-5xl font-bold text-center mb-8">
@@ -26,7 +28,7 @@ const Courses = () => {
       </section>
       {/* course cards section  */}
       {/* <div className="dlex flex-wrap justify-center gap-6 mt-10 max-w-7xl mx-auto px-4"> */}
-       <CourseCardWrapper />
+      <CourseCardWrapper />
     </div>
   );
 };

@@ -1,11 +1,22 @@
-import React from "react";
+// import React from "react";
+import Header from "../components/Navbar";
 import HeroSection from "../UI/herosection";
-
+import ProgressInfo from "../components/progressInfo";
+import FeaturedCoursesHome from "../components/featuredCoursesHome";
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center ">
-      <div className="min-h-lvh w-full bg-blue-100">
+    <div>
+      <div>
+        <Header />
+      </div>
+      <div>
         <HeroSection />
+      </div>
+      <div>
+        <ProgressInfo />
+      </div>
+      <div className=" h-32">
+        <FeaturedCoursesHome/>
       </div>
     </div>
   );

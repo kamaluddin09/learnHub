@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "./Layout/Navbar";
+import Header from "./components/Navbar";
 import Home from "./pages/Home";
 import RegisterChoice from "./Login sign-up/ChooseRole";
 import SignInForm from "./Login sign-up/SignInForm";
@@ -24,17 +24,10 @@ import MyCourses from "./ID-sections/MyCourses";
 import Students from "./ID-sections/Students";
 import Settings from "./ID-sections/Settings";
 
-
-function AppLayout() {
-  const location = useLocation();
-
-  // hide Header if user is on /instructor/*
-  const hideHeader = location.pathname.startsWith("/instructor");
-
+function App() {
   return (
-    <>
-      {!hideHeader && <Header />} {/* only show on public pages */}
-
+    <Router>
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         {/* Public routes */}
         <Route path="/" element={<Home />} />
@@ -55,15 +48,6 @@ function AppLayout() {
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
-    </>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <AppLayout />
     </Router>
   );
 }
