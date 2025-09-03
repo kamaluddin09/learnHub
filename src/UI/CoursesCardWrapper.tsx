@@ -15,6 +15,7 @@ const CourseCardWrapper = () => {
 
     return () => clearTimeout(timer);
   }, []);
+  
 
   if (loading) return <p className="p-6">Loading courses...</p>;
 
